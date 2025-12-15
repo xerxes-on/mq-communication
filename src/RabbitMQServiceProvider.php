@@ -41,6 +41,34 @@ class RabbitMQServiceProvider extends ServiceProvider
             __DIR__.'/../config/rabbitmq.php',
             'rabbitmq'
         );
+
+        $this->registerOutboxDatabaseConnection();
+    }
+
+    protected function registerOutboxDatabaseConnection(): void
+    {
+        $this->app->booted(function () {
+            $connectionName = config('rabbitmq.outbox.connection', 'outbox');
+
+            // Only register if the connection doesn't already exist
+            if (config("database.connections.{$connectionName}") === null) {
+                config([
+                    "database.connections.{$connectionName}" => [
+                        'driver' => 'pgsql',
+                        'host' => env('OUTBOX_DB_HOST', '127.0.0.1'),
+                        'port' => env('OUTBOX_DB_PORT', '5432'),
+                        'database' => env('OUTBOX_DB_DATABASE', 'mq_outbox'),
+                        'username' => env('OUTBOX_DB_USERNAME', 'root'),
+                        'password' => env('OUTBOX_DB_PASSWORD', ''),
+                        'charset' => 'utf8',
+                        'prefix' => '',
+                        'prefix_indexes' => true,
+                        'search_path' => 'public',
+                        'sslmode' => 'prefer',
+                    ],
+                ]);
+            }
+        });
     }
 
     public function boot(): void
