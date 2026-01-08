@@ -12,8 +12,6 @@ class RabbitMQConsumer
 
     private int $qos = 1;
 
-    private bool $acknowledge = false;
-
     private ?Closure $errorHandler = null;
 
     public function __construct(AMQPChannel $channel)
@@ -21,9 +19,12 @@ class RabbitMQConsumer
         $this->channel = $channel;
     }
 
-    public function receiveWithoutAcknowledgement(int $numberOfMessages): RabbitMQConsumer
+    /**
+     * Set the prefetch count (QoS) for the consumer.
+     */
+    public function prefetch(int $count): RabbitMQConsumer
     {
-        $this->qos = $numberOfMessages;
+        $this->qos = $count;
 
         return $this;
     }
@@ -40,6 +41,13 @@ class RabbitMQConsumer
         return $this;
     }
 
+    /**
+     * Consume messages from a queue.
+     *
+     * Messages are always consumed with manual acknowledgment required.
+     * On successful processing, message is acknowledged.
+     * On failure, message is rejected and requeued (or sent to DLQ if configured).
+     */
     public function from(string $queue, callable $handle): RabbitMQConsumer
     {
         $this->channel->basic_qos(null, $this->qos, null);
@@ -48,7 +56,7 @@ class RabbitMQConsumer
             $queue,
             '',
             false,
-            ! $this->acknowledge,
+            false, // no_ack=false: always require manual acknowledgment
             false,
             false,
             function (AMQPMessage $message) use ($handle, $queue) {
@@ -57,10 +65,7 @@ class RabbitMQConsumer
 
                 try {
                     call_user_func_array($handle, [$payload, $routingKey]);
-
-                    if ($this->acknowledge) {
-                        $message->ack();
-                    }
+                    $message->ack();
                 } catch (\Throwable $exception) {
                     if ($this->errorHandler !== null) {
                         call_user_func($this->errorHandler, $message, $exception, [
@@ -69,22 +74,14 @@ class RabbitMQConsumer
                             'routing_key' => $routingKey,
                         ]);
                     } else {
-                        // Default behavior: nack without requeue (sends to DLQ if configured)
-                        if ($this->acknowledge) {
-                            $message->nack(false);
-                        }
+                        // Reject and requeue the message for retry
+                        // If DLQ is configured, message will be sent there after max retries
+                        $message->nack(true);
                         throw $exception;
                     }
                 }
             }
         );
-
-        return $this;
-    }
-
-    public function acknowledge(): RabbitMQConsumer
-    {
-        $this->acknowledge = true;
 
         return $this;
     }

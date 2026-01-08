@@ -19,8 +19,6 @@ class RabbitMQMessage
 
     private bool $persistent = false;
 
-    private ?bool $useOutbox = null;
-
     private string $routingKey = '';
 
     private string $exchange = '';
@@ -64,27 +62,6 @@ class RabbitMQMessage
     }
 
     /**
-     * Enable outbox pattern for guaranteed delivery.
-     * Messages are stored in database first, then published.
-     */
-    public function viaOutbox(bool $enabled = true): RabbitMQMessage
-    {
-        $this->useOutbox = $enabled;
-
-        return $this;
-    }
-
-    /**
-     * Disable outbox pattern - publish directly to RabbitMQ.
-     */
-    public function withoutOutbox(): RabbitMQMessage
-    {
-        $this->useOutbox = false;
-
-        return $this;
-    }
-
-    /**
      * Set custom headers for the message.
      *
      * @param  array<string, mixed>  $headers
@@ -96,26 +73,19 @@ class RabbitMQMessage
         return $this;
     }
 
+    /**
+     * Publish the message to RabbitMQ.
+     *
+     * Always attempts direct publish first. If RabbitMQ is unavailable,
+     * automatically falls back to storing in the outbox for later retry.
+     * This behavior cannot be disabled to ensure message delivery guarantees.
+     */
     public function publish(): void
-    {
-        // Check if outbox is explicitly set, otherwise use config default
-        $useOutbox = $this->useOutbox ?? config('rabbitmq.outbox.enabled', true);
-
-        if ($useOutbox) {
-            $this->publishViaOutbox();
-
-            return;
-        }
-
-        $this->publishDirectly();
-    }
-
-    private function publishViaOutbox(): void
     {
         $logChannel = config('rabbitmq.log-channel', config('logging.default'));
 
         try {
-            $this->publishDirectly();
+            $this->doPublish();
 
             Log::channel($logChannel)->info('[RabbitMQ] Message published directly', [
                 'exchange' => $this->exchange,
@@ -133,7 +103,26 @@ class RabbitMQMessage
         }
     }
 
-    private function publishDirectly(): void
+    /**
+     * Publish directly to RabbitMQ without outbox fallback.
+     *
+     * This is used internally by the outbox worker and DLQ retry mechanism.
+     * If publishing fails, the exception is thrown (not stored in outbox).
+     *
+     * @internal
+     */
+    public function publishDirect(): void
+    {
+        $this->doPublish();
+
+        $logChannel = config('rabbitmq.log-channel', config('logging.default'));
+        Log::channel($logChannel)->info('[RabbitMQ] Message published directly (no outbox fallback)', [
+            'exchange' => $this->exchange,
+            'routing_key' => $this->routingKey,
+        ]);
+    }
+
+    private function doPublish(): void
     {
         $this->channel->basic_publish(
             new AMQPMessage(json_encode($this->payload), $this->properties()),

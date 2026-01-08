@@ -50,14 +50,18 @@ return [
     | Outbox Pattern Settings
     |--------------------------------------------------------------------------
     |
-    | The outbox pattern provides guaranteed message delivery. When enabled,
-    | messages are first attempted to publish directly. If direct publish fails,
-    | messages are stored in the database for later retry by the outbox worker.
+    | The outbox pattern provides guaranteed message delivery and is always
+    | enabled as an automatic fallback. When publishing a message:
+    |
+    | 1. Direct publish to RabbitMQ is attempted first
+    | 2. If RabbitMQ is unavailable, the message is stored in the outbox database
+    | 3. The outbox worker (outbox:work) retries pending messages
+    |
+    | This behavior cannot be disabled to ensure message delivery guarantees.
     |
     */
 
     'outbox' => [
-        'enabled' => (bool) env('RABBITMQ_OUTBOX_ENABLED', true),
         'connection' => env('RABBITMQ_OUTBOX_CONNECTION', 'outbox'),
         'table' => env('RABBITMQ_OUTBOX_TABLE', 'outbox_messages'),
         'failed_table' => env('RABBITMQ_OUTBOX_FAILED_TABLE', 'outbox_failed_messages'),
@@ -105,6 +109,10 @@ return [
     | - sync: Events fired synchronously, errors stop the consumer
     | - kind-sync: Events fired synchronously, errors logged but consumer continues
     | - job: Events dispatched via Laravel queue jobs
+    |
+    | Note: Message acknowledgment is always required. On successful processing,
+    | messages are acknowledged. On failure, messages are requeued for retry
+    | (or sent to DLQ if configured and max retries exceeded).
     |
     */
 

@@ -50,8 +50,7 @@ RABBITMQ_USER=guest
 RABBITMQ_PASS=guest
 RABBITMQ_VHOST=/
 
-# Outbox Pattern
-RABBITMQ_OUTBOX_ENABLED=true
+# Outbox Pattern (always enabled as fallback)
 RABBITMQ_OUTBOX_CONNECTION=outbox
 
 # Dead Letter Queue
@@ -96,23 +95,19 @@ app(RabbitMQ::class)
 
 ### Outbox Pattern (Guaranteed Delivery)
 
-When outbox is enabled (default), messages follow this flow:
+The outbox pattern is always enabled as an automatic fallback and cannot be disabled. Messages follow this flow:
 
 1. **Try direct publish** - Message is sent immediately to RabbitMQ
-2. **On failure** - Message is stored in the database outbox table
-3. **Outbox worker** - Processes failed messages and retries publishing
+2. **On failure** - Message is automatically stored in the database outbox table
+3. **Outbox worker** - Processes pending messages and retries publishing
 
 ```php
-// Uses outbox by default (configurable via RABBITMQ_OUTBOX_ENABLED)
 app(RabbitMQ::class)
     ->message()
     ->viaExchange('my.exchange')
     ->route('my.routing.key')
     ->withPayload($payload)
     ->publish();
-
-// Explicitly disable outbox (direct publish only)
-->withoutOutbox()
 ```
 
 Process outbox messages:
@@ -197,6 +192,14 @@ Configure how consumed events are dispatched:
 - **sync**: Events fired synchronously. Errors stop the consumer (unless DLQ is enabled).
 - **kind-sync**: Events fired synchronously. Errors are logged but don't stop the consumer.
 - **job**: Events dispatched via Laravel queue jobs.
+
+### Message Acknowledgment
+
+Message acknowledgment is always required and cannot be disabled:
+
+- **On success**: Message is acknowledged and removed from the queue
+- **On failure**: Message is rejected and requeued for retry
+- **With DLQ enabled**: After max retries, message is moved to the dead letter queue
 
 ## Dead Letter Queue (DLQ)
 

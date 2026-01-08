@@ -58,7 +58,7 @@ class OutboxWorker extends Command
                         $messageBuilder->route($message->routing_key);
                     }
 
-                    $messageBuilder->withoutOutbox()->publish();
+                    $messageBuilder->publishDirect();
 
                     $this->outboxService->markAsPublished($message);
 

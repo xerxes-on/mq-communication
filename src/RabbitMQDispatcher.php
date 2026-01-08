@@ -82,7 +82,7 @@ class RabbitMQDispatcher extends Dispatcher
             $message->route($routingKey);
         }
 
-        $message->withoutOutbox()->publish();
+        $message->publishDirect();
     }
 
     private function formatProperty($property)

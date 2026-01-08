@@ -102,8 +102,7 @@ class ConsumeEventMessages extends Command
 
         $consumer = $rabbitmq
             ->consume()
-            ->acknowledge()
-            ->receiveWithoutAcknowledgement($prefetch);
+            ->prefetch($prefetch);
 
         // Set up error handler for DLQ/retry
         if ($this->dlqEnabled) {
@@ -335,13 +334,12 @@ class ConsumeEventMessages extends Command
             ->route($retryQueueRoutingKey)
             ->withPayload($enrichedPayload)
             ->persistent()
-            ->withoutOutbox()
             ->withHeaders([
                 'x-retry-count' => $retryCount,
                 'x-original-queue' => $originalQueue,
                 'x-original-routing-key' => $routingKey,
             ])
-            ->publish();
+            ->publishDirect();
     }
 
     /**
@@ -372,8 +370,7 @@ class ConsumeEventMessages extends Command
             ->route($dlqRoutingKey)
             ->withPayload($enrichedPayload)
             ->persistent()
-            ->withoutOutbox()
-            ->publish();
+            ->publishDirect();
     }
 
     /**

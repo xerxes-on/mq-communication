@@ -83,8 +83,7 @@ class ReprocessDeadLetterQueue extends Command
                     ->route($originalRoutingKey)
                     ->withPayload($payload)
                     ->persistent()
-                    ->withoutOutbox()
-                    ->publish();
+                    ->publishDirect();
 
                 // ACK the DLQ message
                 $message->ack();
