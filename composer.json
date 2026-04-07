@@ -30,7 +30,8 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^10.0|^11.0"
+        "phpunit/phpunit": "^10.0|^11.0",
+        "laravel/pint": "^1.13"
     },
     "autoload": {
         "psr-4": {
@@ -44,6 +45,8 @@
     },
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse",
+        "pint": "vendor/bin/pint",
+        "pint-test": "vendor/bin/pint --test",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest coverage"
     },

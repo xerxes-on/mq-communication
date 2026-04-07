@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Xerxes\RabbitMQ\Tests;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Xerxes\RabbitMQ\RabbitMQServiceProvider;
@@ -30,7 +31,7 @@ class TestCase extends Orchestra
     }
 
     /**
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  Application  $app
      */
     public function getEnvironmentSetUp($app): void
     {

@@ -1,0 +1,191 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Commands\\\\ConsumeEventMessages\\:\\:fireEvent\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Commands/ConsumeEventMessages.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Commands\\\\ConsumeEventMessages\\:\\:handleFailedMessage\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Commands/ConsumeEventMessages.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Commands\\\\ConsumeEventMessages\\:\\:logError\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Commands/ConsumeEventMessages.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Commands\\\\ConsumeEventMessages\\:\\:logInfo\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Commands/ConsumeEventMessages.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Commands\\\\ConsumeEventMessages\\:\\:logWarning\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Commands/ConsumeEventMessages.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Commands\\\\ConsumeEventMessages\\:\\:publishToDeadLetterQueue\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Commands/ConsumeEventMessages.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Commands\\\\ConsumeEventMessages\\:\\:publishToRetryQueue\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Commands/ConsumeEventMessages.php
+
+		-
+			message: "#^Unable to resolve the template type TKey in call to function collect$#"
+			count: 1
+			path: src/Commands/ConsumeEventMessages.php
+
+		-
+			message: "#^Unable to resolve the template type TValue in call to function collect$#"
+			count: 1
+			path: src/Commands/ConsumeEventMessages.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Commands\\\\DeclareEventExchanges\\:\\:getEvents\\(\\) return type with generic class Illuminate\\\\Support\\\\Collection does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Commands/DeclareEventExchanges.php
+
+		-
+			message: "#^Access to an undefined property Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:\\$exchange\\.$#"
+			count: 2
+			path: src/Commands/OutboxWorker.php
+
+		-
+			message: "#^Access to an undefined property Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:\\$payload\\.$#"
+			count: 1
+			path: src/Commands/OutboxWorker.php
+
+		-
+			message: "#^Access to an undefined property Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:\\$routing_key\\.$#"
+			count: 2
+			path: src/Commands/OutboxWorker.php
+
+		-
+			message: "#^Access to an undefined property Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:\\$exchange\\.$#"
+			count: 2
+			path: src/Commands/ProcessOutboxMessages.php
+
+		-
+			message: "#^Access to an undefined property Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:\\$payload\\.$#"
+			count: 1
+			path: src/Commands/ProcessOutboxMessages.php
+
+		-
+			message: "#^Access to an undefined property Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:\\$routing_key\\.$#"
+			count: 1
+			path: src/Commands/ProcessOutboxMessages.php
+
+		-
+			message: "#^Parameter \\#1 \\$prefetch_size of method PhpAmqpLib\\\\Channel\\\\AMQPChannel\\:\\:basic_qos\\(\\) expects int, null given\\.$#"
+			count: 1
+			path: src/Commands/ReprocessDeadLetterQueue.php
+
+		-
+			message: "#^Unable to resolve the template type TKey in call to function collect$#"
+			count: 1
+			path: src/Commands/ReprocessDeadLetterQueue.php
+
+		-
+			message: "#^Unable to resolve the template type TValue in call to function collect$#"
+			count: 1
+			path: src/Commands/ReprocessDeadLetterQueue.php
+
+		-
+			message: "#^Access to an undefined property Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:\\$exchange\\.$#"
+			count: 1
+			path: src/Data/FailedOutboxMessageData.php
+
+		-
+			message: "#^Access to an undefined property Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:\\$payload\\.$#"
+			count: 1
+			path: src/Data/FailedOutboxMessageData.php
+
+		-
+			message: "#^Access to an undefined property Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:\\$routing_key\\.$#"
+			count: 1
+			path: src/Data/FailedOutboxMessageData.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Data\\\\FailedOutboxMessageData\\:\\:__construct\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Data/FailedOutboxMessageData.php
+
+		-
+			message: "#^Parameter \\$failedAt of class Xerxes\\\\RabbitMQ\\\\Data\\\\FailedOutboxMessageData constructor expects Illuminate\\\\Support\\\\CarbonImmutable, Carbon\\\\CarbonImmutable given\\.$#"
+			count: 1
+			path: src/Data/FailedOutboxMessageData.php
+
+		-
+			message: "#^Parameter \\$failedAt of method Xerxes\\\\RabbitMQ\\\\Data\\\\FailedOutboxMessageData\\:\\:__construct\\(\\) has invalid type Illuminate\\\\Support\\\\CarbonImmutable\\.$#"
+			count: 1
+			path: src/Data/FailedOutboxMessageData.php
+
+		-
+			message: "#^Property Xerxes\\\\RabbitMQ\\\\Data\\\\FailedOutboxMessageData\\:\\:\\$failedAt has unknown class Illuminate\\\\Support\\\\CarbonImmutable as its type\\.$#"
+			count: 1
+			path: src/Data/FailedOutboxMessageData.php
+
+		-
+			message: "#^Access to an undefined property Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:\\$retry_count\\.$#"
+			count: 1
+			path: src/Models/OutboxMessage.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Models\\\\OutboxMessage\\:\\:__construct\\(\\) has parameter \\$attributes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Models/OutboxMessage.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\RabbitMQConsumer\\:\\:onError\\(\\) has parameter \\$handler with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/RabbitMQConsumer.php
+
+		-
+			message: "#^Parameter \\#1 \\$prefetch_size of method PhpAmqpLib\\\\Channel\\\\AMQPChannel\\:\\:basic_qos\\(\\) expects int, null given\\.$#"
+			count: 1
+			path: src/RabbitMQConsumer.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\RabbitMQDispatcher\\:\\:dispatch\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/RabbitMQDispatcher.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\RabbitMQDispatcher\\:\\:formatProperty\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/RabbitMQDispatcher.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\RabbitMQDispatcher\\:\\:formatProperty\\(\\) has parameter \\$property with no type specified\\.$#"
+			count: 1
+			path: src/RabbitMQDispatcher.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\RabbitMQDispatcher\\:\\:publishDirectly\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/RabbitMQDispatcher.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\RabbitMQMessage\\:\\:properties\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/RabbitMQMessage.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\RabbitMQMessage\\:\\:withPayload\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/RabbitMQMessage.php
+
+		-
+			message: "#^Property Xerxes\\\\RabbitMQ\\\\RabbitMQMessage\\:\\:\\$payload type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/RabbitMQMessage.php
+
+		-
+			message: "#^Method Xerxes\\\\RabbitMQ\\\\Support\\\\EventJobWrapper\\:\\:__construct\\(\\) has parameter \\$payload with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Support/EventJobWrapper.php
