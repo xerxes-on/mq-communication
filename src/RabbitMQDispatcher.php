@@ -12,7 +12,7 @@ use Xerxes\RabbitMQ\Support\ShouldPublish;
 
 class RabbitMQDispatcher extends Dispatcher
 {
-    public function dispatch($event, $payload = [], $halt = false): ?array
+    public function dispatch($event, $payload = [], $halt = false): mixed
     {
         if (! $event instanceof ShouldPublish) {
             return parent::dispatch($event, $payload, $halt);
